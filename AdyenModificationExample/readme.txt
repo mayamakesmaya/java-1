@@ -4,6 +4,8 @@ A short explanation about directory structure:
 - src: this folder contains sample codes of how to do modifications.
 - wsdl: this folder contains wsdl files for payment and recurring API
 - lib: this folder contains .jar libs that need to be in the class path
+- adyen-axis-ws-client.jar: has been generated from the Adyen wsdls, you
+can update the wsdls and regenerate a new one yourself if needed
 
 In order to work:
 1 - make sure that all .jars in lib folder are in the classpath.
