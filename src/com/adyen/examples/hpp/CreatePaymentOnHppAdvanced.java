@@ -35,6 +35,17 @@ public class CreatePaymentOnHppAdvanced extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		/**
+		 * General HPP settings
+		 * - hppUrl: URL of the Adyen HPP to submit the form to
+		 * - hmacKey: shared secret key used to encrypt the signature
+		 * 
+		 * Both variables are dependent on the environment which should be used (Test/Live).
+		 * HMAC key can be set up: Adyen CA >> Skins >> Choose your Skin >> Edit Tab >> Edit HMAC key for Test & Live.
+		 */
+		String hppUrl = "https://test.adyen.com/hpp/pay.shtml";
+		String hmacKey = "YourHmacSecretKey";
+
+		/**
 		 * Defining variables
 		 * The HPP requires certain variables to be posted in order to create a payment possibility for the shopper.
 		 * 
@@ -52,19 +63,20 @@ public class CreatePaymentOnHppAdvanced extends HttpServlet {
 		 *                        Format: YYYY-MM-DDThh:mm:ssTZD
 		 * shopperLocale        : A combination of language code and country code to specify 
 		 *                        the language used in the session i.e. en_GB.
-		 * orderData            : A fragment of HTML/text that will be displayed on the HPP, for example to show the basket (optional)
+		 * orderData            : A fragment of HTML/text that will be displayed on the HPP (optional)
 		 * countryCode          : Country code according to ISO_3166-1_alpha-2 standard  (optional)
 		 * shopperEmail         : The e-mailaddress of the shopper (optional)
 		 * shopperReference     : The shopper reference, i.e. the shopper ID (optional)
 		 * recurringContract    : Can be "ONECLICK","RECURRING" or "ONECLICK,RECURRING", this allows you to store
-		 *                        the payment details as a ONECLICK and/or RECURRING contract. Please note that if you supply
-		 *                        recurringContract, shopperEmail and shopperReference become mandatory. Please
-		 *                        view the recurring examples in the repository as well. 
+		 *                        the payment details as a ONECLICK and/or RECURRING contract. Please note that if you
+		 *                        supply recurringContract, shopperEmail and shopperReference become mandatory.
+		 *                        Please view the recurring examples in the repository as well.
 		 * allowedMethods       : Allowed payment methods separated with a , i.e. "ideal,mc,visa" (optional)
 		 * blockedMethods       : Blocked payment methods separated with a , i.e. "ideal,mc,visa" (optional)
-		 * shopperStatement     : To submit a variable shopper statement you can set the shopperStatement field in the payment request.
-		 * merchantReturnData   : This field willl be passed back as-is on the return URL when the shopper completes (or abandons) the 
-		 *                        payment and returns to your shop. (optional)
+		 * shopperStatement     : To submit a variable shopper statement you can set the shopperStatement field in the
+		 *                        payment request.
+		 * merchantReturnData   : This field willl be passed back as-is on the return URL when the shopper completes
+		 *                        (or abandons) the payment and returns to your shop. (optional)
 		 * offset               : Numeric value that will be added to the fraud score (optional)
 		 * brandCode            : The payment method the shopper likes to pay with, i.e. ideal (optional)
 		 * issuerId             : If brandCode specifies a redirect payment method, the issuer can be 
@@ -101,9 +113,10 @@ public class CreatePaymentOnHppAdvanced extends HttpServlet {
 		String merchantReturnData = "";
 		String offset = "";
 
-		// By providing the brandCode and issuerId the HPP will redirect the shopper directly to the redirect payment method.
-		// Please note: the form should be posted to https://test.adyen.com/hpp/details.shtml rather than pay.shtml.
-		// While posting to details.shtml countryCode becomes a required as well.
+		// By providing the brandCode and issuerId the HPP will redirect the shopper directly to the redirect payment
+		// method.
+		// Please note: the form should be posted to https://test.adyen.com/hpp/details.shtml rather than pay.shtml,
+		// change the hppUrl accordingly. While posting to details.shtml countryCode becomes a required as well.
 		String brandCode = "";
 		String issuerId = "";
 
@@ -122,7 +135,8 @@ public class CreatePaymentOnHppAdvanced extends HttpServlet {
 		 * - billingAddress.postalCode: The postal/zip code.
 		 * - billingAddress.stateOrProvince: The state or province.
 		 * - billingAddress.country: The country in ISO 3166-1 alpha-2 format i.e. NL.
-		 * - billingAddressType: You can specify whether the shopper is allowed to view and/or modify these personal details.
+		 * - billingAddressType: You can specify whether the shopper is allowed to view and/or modify these personal
+		 * details.
 		 * - billingAddressSig: A separate merchant signature that is required for these fields.
 		 * 
 		 * 2. Delivery address;
@@ -132,7 +146,8 @@ public class CreatePaymentOnHppAdvanced extends HttpServlet {
 		 * - deliveryAddress.postalCode: The postal/zip code.
 		 * - deliveryAddress.stateOrProvince: The state or province.
 		 * - deliveryAddress.country: The country in ISO 3166-1 alpha-2 format i.e. NL.
-		 * - deliveryAddressType: You can specify whether the shopper is allowed to view and/or modify these personal details.
+		 * - deliveryAddressType: You can specify whether the shopper is allowed to view and/or modify these personal
+		 * details.
 		 * - deliveryAddressSig: A separate merchant signature that is required for these fields.
 		 * 
 		 * 3. Shopper information
@@ -186,17 +201,15 @@ public class CreatePaymentOnHppAdvanced extends HttpServlet {
 		 * must be encrypted according to the procedures below.
 		 */
 
-		// HMAC Key is a shared secret KEY used to encrypt the signature. Set up the HMAC key:
-		// Adyen Test CA >> Skins >> Choose your Skin >> Edit Tab >> Edit HMAC key for Test and Live
-		String hmacKey = "YourHmacSecretKey";
 		String signingString;
 
 		// Compute the merchantSig
 		String merchantSig;
 		try {
-			signingString = paymentAmount + currencyCode + shipBeforeDate + merchantReference + skinCode + merchantAccount
-					+ sessionValidity + shopperEmail + shopperReference + recurringContract + allowedMethods + blockedMethods
-					+ shopperStatement + merchantReturnData + billingAddressType + deliveryAddressType + shopperType + offset;
+			signingString = paymentAmount + currencyCode + shipBeforeDate + merchantReference + skinCode
+					+ merchantAccount + sessionValidity + shopperEmail + shopperReference + recurringContract
+					+ allowedMethods + blockedMethods + shopperStatement + merchantReturnData + billingAddressType
+					+ deliveryAddressType + shopperType + offset;
 			merchantSig = calculateHMAC(hmacKey, signingString);
 		} catch (GeneralSecurityException e) {
 			throw new ServletException(e);
@@ -225,14 +238,16 @@ public class CreatePaymentOnHppAdvanced extends HttpServlet {
 		// Compute the shopperSig
 		String shopperSig;
 		try {
-			signingString = shopperFirstName + shopperInfix + shopperLastName + shopperGender + shopperDateOfBirthDayOfMonth
-					+ shopperDateOfBirthMonth + shopperDateOfBirthYear + shopperTelephoneNumber;
+			signingString = shopperFirstName + shopperInfix + shopperLastName + shopperGender
+					+ shopperDateOfBirthDayOfMonth + shopperDateOfBirthMonth + shopperDateOfBirthYear
+					+ shopperTelephoneNumber;
 			shopperSig = calculateHMAC(hmacKey, signingString);
 		} catch (GeneralSecurityException e) {
 			throw new ServletException(e);
 		}
 
 		// Set request parameters for use on the JSP page
+		request.setAttribute("hppUrl", hppUrl);
 		request.setAttribute("merchantReference", merchantReference);
 		request.setAttribute("paymentAmount", paymentAmount);
 		request.setAttribute("currencyCode", currencyCode);

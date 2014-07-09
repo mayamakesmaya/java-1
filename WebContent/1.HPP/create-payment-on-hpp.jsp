@@ -5,7 +5,7 @@
 		<title>Adyen - Create Payment On Hosted Payment Page (HPP)</title>
 	</head>
 	<body>
-		<form method="GET" action="https://test.adyen.com/hpp/pay.shtml" target="_blank">
+		<form method="POST" action="${hppUrl}" target="_blank">
 			<input type="hidden" name="merchantReference" value="${merchantReference}">
 			<input type="hidden" name="paymentAmount" value="${paymentAmount}">
 			<input type="hidden" name="currencyCode" value="${currencyCode}">

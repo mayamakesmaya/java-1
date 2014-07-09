@@ -34,6 +34,17 @@ public class CreatePaymentOnHpp extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		/**
+		 * General HPP settings
+		 * - hppUrl: URL of the Adyen HPP to submit the form to
+		 * - hmacKey: shared secret key used to encrypt the signature
+		 * 
+		 * Both variables are dependent on the environment which should be used (Test/Live).
+		 * HMAC key can be set up: Adyen CA >> Skins >> Choose your Skin >> Edit Tab >> Edit HMAC key for Test & Live.
+		 */
+		String hppUrl = "https://test.adyen.com/hpp/pay.shtml";
+		String hmacKey = "YourHmacSecretKey";
+
+		/**
 		 * Defining variables
 		 * The HPP requires certain variables to be posted in order to create a payment possibility for the shopper.
 		 * 
@@ -98,11 +109,9 @@ public class CreatePaymentOnHpp extends HttpServlet {
 		 * the signature.
 		 */
 
-		// HMAC Key is a shared secret KEY used to encrypt the signature. Set up the HMAC key:
-		// Adyen Test CA >> Skins >> Choose your Skin >> Edit Tab >> Edit HMAC key for Test and Live
-		String hmacKey = "YourHmacSecretKey";
-		String signingString = paymentAmount + currencyCode + shipBeforeDate + merchantReference + skinCode + merchantAccount
-				+ sessionValidity + shopperEmail + shopperReference + allowedMethods + blockedMethods + offset;
+		String signingString = paymentAmount + currencyCode + shipBeforeDate + merchantReference + skinCode
+				+ merchantAccount + sessionValidity + shopperEmail + shopperReference + allowedMethods + blockedMethods
+				+ offset;
 
 		String merchantSig;
 		try {
@@ -112,6 +121,7 @@ public class CreatePaymentOnHpp extends HttpServlet {
 		}
 
 		// Set request parameters for use on the JSP page
+		request.setAttribute("hppUrl", hppUrl);
 		request.setAttribute("merchantReference", merchantReference);
 		request.setAttribute("paymentAmount", paymentAmount);
 		request.setAttribute("currencyCode", currencyCode);
