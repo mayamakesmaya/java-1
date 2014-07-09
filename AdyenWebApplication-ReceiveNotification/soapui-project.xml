@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<con:soapui-project name="adyen-integration" soapui-version="4.0.1.1" xmlns:con="http://eviware.com/soapui/config"><con:settings><con:setting id="ProjectSettings@projectNature">com.eviware.soapui.soapuiNature</con:setting></con:settings><con:properties/><con:wssContainer/><con:sensitiveInformation/></con:soapui-project>
