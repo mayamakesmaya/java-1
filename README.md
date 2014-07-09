@@ -1,4 +1,30 @@
-java
-====
+Adyen Java Integration
+==============
+The code examples in this repository help you integrate with the Adyen platform using Java. Please go through the code examples and read the documentation in the files itself. Each code example requires you to change some parameters to connect to your Adyen account, such as merchant account and skincode.
 
-Java Sample Code
+## Servlet overview
+```
+1.HPP (Hosted Payment Page)
+  - CreatePaymentOnHpp             : Simple form creating a payment on our HPP;
+  - CreatePaymentOnHppAdvanced     : Advanced form creating a payment on our HPP;
+```
+
+## Code structure
+```
+src                                       : Java implementation of the servlets
+  - com.adyen.examples.hpp                
+    - CreatePaymentOnHpp.java
+    - CreatePaymentOnHppAdvanced.java
+WebContent                                : JSP pages for the servlets
+  - 1.HPP
+    - create-payment-on-hpp.jsp
+    - create-payment-on-hpp-advanced.jsp
+  - WEB-INF/lib/                          : Java libraries (JARs) used in the servlets
+  - WEB-INF/web.xml                       : Deployment descriptor
+```
+
+## Manuals
+The code examples are based on our Integration manual and the API manual which provides rich information on how our platform works. Please find our manuals on the Developers section at www.adyen.com. 
+
+## Support
+If you do have any suggestions or questions regarding the code examples please send an e-mail to support@adyen.com.
