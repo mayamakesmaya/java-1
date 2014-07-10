@@ -12,9 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.ws.BindingProvider;
 
-import com.adyen.services.common.Address;
 import com.adyen.services.common.Amount;
-import com.adyen.services.payment.Card;
+import com.adyen.services.payment.AnyType2AnyTypeMap;
+import com.adyen.services.payment.AnyType2AnyTypeMap.Entry;
 import com.adyen.services.payment.Payment;
 import com.adyen.services.payment.PaymentPortType;
 import com.adyen.services.payment.PaymentRequest;
@@ -22,10 +22,18 @@ import com.adyen.services.payment.PaymentResult;
 import com.adyen.services.payment.ServiceException;
 
 /**
- * Create Payment through the API (SOAP)
+ * Create Client-Side Encryption Payment (SOAP)
  * 
- * Payments can be created through our API, however this is only possible if you are PCI Compliant. SOAP API payments
- * are submitted using the authorise action. We will explain a simple credit card submission.
+ * Merchants that require more stringent security protocols or do not want the additional overhead of managing their PCI
+ * compliance, may decide to implement Client-Side Encryption (CSE). This is particularly useful for Mobile payment
+ * flows where only cards are being offered, as it may result in faster load times and an overall improvement to the
+ * shopper flow. The Adyen Hosted Payment Page (HPP) provides the most comprehensive level of PCI compliancy and you do
+ * not have any PCI obligations. Using CSE reduces your PCI scope when compared to implementing the API without
+ * encryption.
+ * 
+ * If you would like to implement CSE, please provide the completed PCI Self Assessment Questionnaire (SAQ) A to the
+ * Adyen Support Team (support@adyen.com). The form can be found here:
+ * https://www.pcisecuritystandards.org/security_standards/documents.php?category=saqs
  * 
  * Please note: using our API requires a web service user. Set up your Webservice user:
  * Adyen CA >> Settings >> Users >> ws@Company. >> Generate Password >> Submit
@@ -34,8 +42,8 @@ import com.adyen.services.payment.ServiceException;
  * @author Created by Adyen - Payments Made Easy
  */
 
-@WebServlet(urlPatterns = { "/2.API/Soap/CreatePaymentAPI" })
-public class CreatePaymentAPISoap extends HttpServlet {
+@WebServlet(urlPatterns = { "/2.API/Soap/CreatePaymentCSE" })
+public class CreatePaymentCSESoap extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -75,20 +83,7 @@ public class CreatePaymentAPISoap extends HttpServlet {
 		 * - shopperEmail: the e-mail address of the shopper 
 		 * - shopperReference: the shopper reference, i.e. the shopper ID
 		 * - fraudOffset: numeric value that will be added to the fraud score (optional)
-		 * - card
-		 *     - billingAddress: we advice you to submit billingAddress data if available for risk checks;
-		 *         - street: the street name
-		 *         - postalCode: the postal/zip code
-		 *         - city: the city
-		 *         - houseNumberOrName: the house number/name
-		 *         - stateOrProvince: the state or province
-		 *         - country: the country
-		 *     - expiryMonth: the expiration month of the card, written as a 2-digit string, padded with 0 if required
-		 *                    (e.g. 03 or 12)
-		 *     - expiryYear: the expiration year of the card, full-written (e.g. 2016)
-		 *     - holderName: the card holder's name, as embossed on the card
-		 *     - number: the card number
-		 *     - cvc: the card validation code, which is the CVC2 (MasterCard), CVV2 (Visa) or CID (American Express)
+		 * - additionalData.card.encrypted.json: the encrypted card catched by the POST variables
 		 * </pre>
 		 */
 
@@ -106,25 +101,14 @@ public class CreatePaymentAPISoap extends HttpServlet {
 		amount.setValue(199L);
 		paymentRequest.setAmount(amount);
 
-		// Set card
-		Card card = new Card();
+		// Set additional data
+		Entry encryptedCard = new Entry();
+		encryptedCard.setKey("card.encrypted.json");
+		encryptedCard.setValue(request.getParameter("adyen-encrypted-data"));
 
-		Address billingAddress = new Address();
-		billingAddress.setStreet("Simon Carmiggeltstraat");
-		billingAddress.setPostalCode("1011 DJ");
-		billingAddress.setCity("Amsterdam");
-		billingAddress.setHouseNumberOrName("6-50");
-		billingAddress.setStateOrProvince("");
-		billingAddress.setCountry("NL");
-
-		card.setBillingAddress(billingAddress);
-		card.setExpiryMonth("06");
-		card.setExpiryYear("2016");
-		card.setHolderName("John Doe");
-		card.setNumber("5555444433331111");
-		card.setCvc("737");
-
-		paymentRequest.setCard(card);
+		AnyType2AnyTypeMap additionalData = new AnyType2AnyTypeMap();
+		additionalData.getEntry().add(encryptedCard);
+		paymentRequest.setAdditionalData(additionalData);
 
 		/**
 		 * Send the authorise request.
@@ -145,13 +129,16 @@ public class CreatePaymentAPISoap extends HttpServlet {
 
 		// Set payment result in request data and forward it to corresponding JSP page
 		request.setAttribute("paymentResult", result);
-		request.getRequestDispatcher("/2.API/create-payment-api.jsp").forward(request, response);
+		request.getRequestDispatcher("/2.API/create-payment-cse.jsp").forward(request, response);
 
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// Generate current time server-side and set it as request attribute
+		request.setAttribute("generationTime", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX").format(new Date()));
+
 		// Forward GET request to corresponding JSP page
-		request.getRequestDispatcher("/2.API/create-payment-api.jsp").forward(request, response);
+		request.getRequestDispatcher("/2.API/create-payment-cse.jsp").forward(request, response);
 	}
 
 }
