@@ -12,10 +12,10 @@
 		<% } else { %>
 			<p><strong>Payment result:</strong></p>
 			<ul>
-				<li>pspReference: ${paymentResult.pspReference}</li>
-				<li>resultCode: ${paymentResult.resultCode}</li>
-				<li>authCode: ${paymentResult.authCode}</li>
-				<li>refusalReason: ${paymentResult.refusalReason}</li>
+				<li>pspReference: ${pspReference}</li>
+				<li>resultCode: ${resultCode}</li>
+				<li>authCode: ${authCode}</li>
+				<li>refusalReason: ${refusalReason}</li>
 			</ul>
 		<% } %>
 	</body>

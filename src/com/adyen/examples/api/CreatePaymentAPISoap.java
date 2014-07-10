@@ -66,15 +66,15 @@ public class CreatePaymentAPISoap extends HttpServlet {
 		 * The request should contain the following variables:
 		 * 
 		 * <pre>
-		 * - merchantAccount: the merchant account the payment was processed with.
-		 * - amount: the amount of the payment
-		 *     - currency: the currency of the payment
-		 *     - amount: the amount of the payment
+		 * - merchantAccount: the merchant account the payment was processed with
 		 * - reference: your reference
 		 * - shopperIP: the IP address of the shopper (recommended)
 		 * - shopperEmail: the e-mail address of the shopper 
 		 * - shopperReference: the shopper reference, i.e. the shopper ID
 		 * - fraudOffset: numeric value that will be added to the fraud score (optional)
+		 * - amount: the amount of the payment
+		 *     - currency: the currency of the payment
+		 *     - amount: the amount of the payment
 		 * - card
 		 *     - billingAddress: we advice you to submit billingAddress data if available for risk checks;
 		 *         - street: the street name
@@ -96,8 +96,9 @@ public class CreatePaymentAPISoap extends HttpServlet {
 		PaymentRequest paymentRequest = new PaymentRequest();
 		paymentRequest.setMerchantAccount("YourMerchantAccount");
 		paymentRequest.setReference("TEST-PAYMENT-" + new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss").format(new Date()));
-		paymentRequest.setShopperIP("1.1.1.1");
+		paymentRequest.setShopperIP("123.123.123.123");
 		paymentRequest.setShopperEmail("test@example.com");
+		paymentRequest.setShopperReference("YourReference");
 		paymentRequest.setFraudOffset(0);
 
 		// Set amount
@@ -128,7 +129,15 @@ public class CreatePaymentAPISoap extends HttpServlet {
 
 		/**
 		 * Send the authorise request.
-		 * 
+		 */
+		PaymentResult paymentResult;
+		try {
+			paymentResult = client.authorise(paymentRequest);
+		} catch (ServiceException e) {
+			throw new ServletException(e);
+		}
+
+		/**
 		 * If the payment passes validation a risk analysis will be done and, depending on the outcome, an authorisation
 		 * will be attempted. You receive a payment response with the following fields:
 		 * - pspReference: The reference we assigned to the payment;
@@ -136,15 +145,13 @@ public class CreatePaymentAPISoap extends HttpServlet {
 		 * - authCode: An authorisation code if the payment was successful, or blank otherwise;
 		 * - refusalReason: If the payment was refused, the refusal reason.
 		 */
-		PaymentResult result;
-		try {
-			result = client.authorise(paymentRequest);
-		} catch (ServiceException e) {
-			throw new ServletException(e);
-		}
+		request.setAttribute("paymentResult", paymentResult);
+		request.setAttribute("pspReference", paymentResult.getPspReference());
+		request.setAttribute("resultCode", paymentResult.getResultCode());
+		request.setAttribute("authCode", paymentResult.getAuthCode());
+		request.setAttribute("refusalReason", paymentResult.getRefusalReason());
 
-		// Set payment result in request data and forward it to corresponding JSP page
-		request.setAttribute("paymentResult", result);
+		// Forward payment result to corresponding JSP page
 		request.getRequestDispatcher("/2.API/create-payment-api.jsp").forward(request, response);
 
 	}
