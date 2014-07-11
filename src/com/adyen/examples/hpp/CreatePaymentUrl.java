@@ -53,25 +53,25 @@ public class CreatePaymentUrl extends HttpServlet {
 		 * The variables that you can post to the HPP are the following:
 		 * 
 		 * <pre>
-		 * merchantReference    : The merchant reference is your reference for the payment
-		 * paymentAmount        : Amount specified in minor units EUR 1,00 = 100
-		 * currencyCode         : The three-letter capitalised ISO currency code to pay in i.e. EUR
-		 * shipBeforeDate       : The date by which the goods or services are shipped.
+		 * merchantReference    : Your reference for this payment.
+		 * paymentAmount        : The transaction amount in minor units (e.g. EUR 1,00 = 100).
+		 * currencyCode         : The three character ISO currency code.
+		 * shipBeforeDate       : The date by which the goods or services specifed in the order must be shipped.
 		 *                        Format: YYYY-MM-DD
-		 * skinCode             : The skin code that should be used for the payment
-		 * merchantAccount      : The merchant account you want to process this payment with.
-		 * sessionValidity      : The final time by which a payment needs to have been made. 
+		 * skinCode             : The code of the skin to be used for the payment.
+		 * merchantAccount      : The merchant account for which you want to process the payment.
+		 * sessionValidity      : The time by which a payment needs to have been made.
 		 *                        Format: YYYY-MM-DDThh:mm:ssTZD
-		 * shopperLocale        : A combination of language code and country code to specify 
-		 *                        the language used in the session i.e. en_GB.
-		 * orderData            : A fragment of HTML/text that will be displayed on the HPP (optional)
-		 * countryCode          : Country code according to ISO_3166-1_alpha-2 standard  (optional)
-		 * shopperEmail         : The e-mailaddress of the shopper (optional)
-		 * shopperReference     : The shopper reference, i.e. the shopper ID (optional)
-		 * allowedMethods       : Allowed payment methods separated with a , i.e. "ideal,mc,visa" (optional)
-		 * blockedMethods       : Blocked payment methods separated with a , i.e. "ideal,mc,visa" (optional)
-		 * offset               : Numeric value that will be added to the fraud score (optional)
-		 * merchantSig          : The HMAC signature used by Adyen to test the validy of the form;
+		 * shopperLocale        : A combination of language code and country code used to specify the language to be
+		 *                        used in the payment session (e.g. en_GB).
+		 * orderData            : A fragment of HTML/text that will be displayed on the HPP. (optional)
+		 * countryCode          : Country code according to ISO_3166-1_alpha-2 standard. (optional)
+		 * shopperEmail         : The shopper's email address. (recommended)
+		 * shopperReference     : An ID that uniquely identifes the shopper, such as a customer id. (recommended)
+		 * allowedMethods       : A comma-separated list of allowed payment methods, i.e. "ideal,mc,visa". (optional)
+		 * blockedMethods       : A comma-separated list of blocked payment methods, i.e. "ideal,mc,visa". (optional)
+		 * offset               : An integer that is added to the normal fraud score. (optional)
+		 * merchantSig          : The HMAC signature used by Adyen to test the validy of the form.
 		 * </pre>
 		 */
 

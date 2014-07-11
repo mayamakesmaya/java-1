@@ -65,12 +65,12 @@ public class CapturePaymentSoap extends HttpServlet {
 		 * The following parameters are used:
 		 * 
 		 * <pre>
-		 * - merchantAccount: the merchant account the payment was processed with
-		 * - modificationAmount: the amount to capture
-		 *     - currency: the currency must match the original payment
-		 *     - amount: the value must be the same or less than the original amount
-		 * - originalReference: the pspReference that was assigned to the authorisation
-		 * - reference: your own reference or description to the modification (optional)
+		 * - merchantAccount      : The merchant account used to process the payment.
+		 * - modificationAmount
+		 *     - currency         : The three character ISO currency code, must match that of the original payment request.
+		 *     - value            : The amount to capture (in minor units), must be less than or equal to the authorised amount.
+		 * - originalReference    : The pspReference that was assigned to the authorisation.
+		 * 		   - reference            : Your own reference or description of the modification. (optional)
 		 * </pre>
 		 */
 		ModificationRequest modificationRequest = new ModificationRequest();

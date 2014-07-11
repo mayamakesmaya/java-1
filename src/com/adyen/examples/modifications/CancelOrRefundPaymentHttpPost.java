@@ -71,11 +71,11 @@ public class CancelOrRefundPaymentHttpPost extends HttpServlet {
 		 * Perform cancel or refund request by sending in a modification request, containing the following variables:
 		 * 
 		 * <pre>
-		 * - action: Payment.cancelOrRefund
+		 * - action                   : Payment.cancelOrRefund
 		 * - modificationRequest
-		 *   - merchantAccount: the merchant account the payment was processed with
-		 *   - originalReference: the pspReference that was assigned to the authorisation
-		 *   - reference: your own reference or description to the modification (optional)
+		 *   - merchantAccount        : The merchant account used to process the payment.
+		 *   - originalReference      : The pspReference that was assigned to the authorisation.
+		 *   - reference              : Your own reference or description of the modification. (optional)
 		 * </pre>
 		 */
 		List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
@@ -84,7 +84,7 @@ public class CancelOrRefundPaymentHttpPost extends HttpServlet {
 			new BasicNameValuePair("modificationRequest.merchantAccount", "YourMerchantAccount"),
 			new BasicNameValuePair("modificationRequest.originalReference", "PspReferenceOfTheAuthorisedPayment"),
 			new BasicNameValuePair("modificationRequest.reference", "YourReference")
-		);
+			);
 
 		/**
 		 * Send the HTTP Post request with the specified variables.

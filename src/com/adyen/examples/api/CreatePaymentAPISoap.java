@@ -67,29 +67,30 @@ public class CreatePaymentAPISoap extends HttpServlet {
 		 * The request should contain the following variables:
 		 * 
 		 * <pre>
-		 * - merchantAccount: the merchant account the payment was processed with
-		 * - reference: your reference
-		 * - shopperIP: the IP address of the shopper (recommended)
-		 * - shopperEmail: the e-mail address of the shopper 
-		 * - shopperReference: the shopper reference, i.e. the shopper ID
-		 * - fraudOffset: numeric value that will be added to the fraud score (optional)
-		 * - amount: the amount of the payment
-		 *     - currency: the currency of the payment
-		 *     - amount: the amount of the payment
+		 * - merchantAccount           : The merchant account for which you want to process the payment
+		 * - amount
+		 *     - currency              : The three character ISO currency code.
+		 *     - value                 : The transaction amount in minor units (e.g. EUR 1,00 = 100).
+		 * - reference                 : Your reference for this payment.
+		 * - shopperIP                 : The shopper's IP address. (recommended)
+		 * - shopperEmail              : The shopper's email address. (recommended)
+		 * - shopperReference          : An ID that uniquely identifes the shopper, such as a customer id. (recommended)
+		 * - fraudOffset               : An integer that is added to the normal fraud score. (optional)
 		 * - card
-		 *     - billingAddress: we advice you to submit billingAddress data if available for risk checks;
-		 *         - street: the street name
-		 *         - postalCode: the postal/zip code
-		 *         - city: the city
-		 *         - houseNumberOrName: the house number/name
-		 *         - stateOrProvince: the state or province
-		 *         - country: the country
-		 *     - expiryMonth: the expiration month of the card, written as a 2-digit string, padded with 0 if required
-		 *                    (e.g. 03 or 12)
-		 *     - expiryYear: the expiration year of the card, full-written (e.g. 2016)
-		 *     - holderName: the card holder's name, as embossed on the card
-		 *     - number: the card number
-		 *     - cvc: the card validation code, which is the CVC2 (MasterCard), CVV2 (Visa) or CID (American Express)
+		 *     - expiryMonth           : The expiration date's month written as a 2-digit string,
+		 *                               padded with 0 if required (e.g. 03 or 12).
+		 *     - expiryYear            : The expiration date's year written as in full (e.g. 2016).
+		 *     - holderName            : The card holder's name, as embossed on the card.
+		 *     - number                : The card number.
+		 *     - cvc                   : The card validation code, which is the CVC2 (MasterCard),
+		 *                               CVV2 (Visa) or CID (American Express).
+		 *     - billingAddress (recommended)
+		 *         - street            : The street name.
+		 *         - houseNumberOrName : The house number (or name).
+		 *         - city              : The city.
+		 *         - postalCode        : The postal/zip code.
+		 *         - stateOrProvince   : The state or province.
+		 *         - country           : The country in ISO 3166-1 alpha-2 format (e.g. NL).
 		 * </pre>
 		 */
 
@@ -110,6 +111,11 @@ public class CreatePaymentAPISoap extends HttpServlet {
 
 		// Set card
 		Card card = new Card();
+		card.setExpiryMonth("06");
+		card.setExpiryYear("2016");
+		card.setHolderName("John Doe");
+		card.setNumber("5555444433331111");
+		card.setCvc("737");
 
 		Address billingAddress = new Address();
 		billingAddress.setStreet("Simon Carmiggeltstraat");
@@ -118,13 +124,7 @@ public class CreatePaymentAPISoap extends HttpServlet {
 		billingAddress.setHouseNumberOrName("6-50");
 		billingAddress.setStateOrProvince("");
 		billingAddress.setCountry("NL");
-
 		card.setBillingAddress(billingAddress);
-		card.setExpiryMonth("06");
-		card.setExpiryYear("2016");
-		card.setHolderName("John Doe");
-		card.setNumber("5555444433331111");
-		card.setCvc("737");
 
 		paymentRequest.setCard(card);
 
@@ -141,10 +141,13 @@ public class CreatePaymentAPISoap extends HttpServlet {
 		/**
 		 * If the payment passes validation a risk analysis will be done and, depending on the outcome, an authorisation
 		 * will be attempted. You receive a payment response with the following fields:
-		 * - pspReference: The reference we assigned to the payment;
-		 * - resultCode: The result of the payment. One of Authorised, Refused or Error;
-		 * - authCode: An authorisation code if the payment was successful, or blank otherwise;
-		 * - refusalReason: If the payment was refused, the refusal reason.
+		 * 
+		 * <pre>
+		 * - pspReference    : Adyen's unique reference that is associated with the payment.
+		 * - resultCode      : The result of the payment. Possible values: Authorised, Refused, Error or Received.
+		 * - authCode        : The authorisation code if the payment was successful. Blank otherwise.
+		 * - refusalReason   : Adyen's mapped refusal reason, populated if the payment was refused.
+		 * </pre>
 		 */
 		PrintWriter out = response.getWriter();
 
@@ -153,7 +156,7 @@ public class CreatePaymentAPISoap extends HttpServlet {
 		out.println("- resultCode: " + paymentResult.getResultCode());
 		out.println("- authCode: " + paymentResult.getAuthCode());
 		out.println("- refusalReason: " + paymentResult.getRefusalReason());
-		
+
 	}
 
 }

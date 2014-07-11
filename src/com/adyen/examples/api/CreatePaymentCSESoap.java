@@ -47,15 +47,15 @@ import com.adyen.services.payment.ServiceException;
 public class CreatePaymentCSESoap extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		// Generate current time server-side and set it as request attribute
 		request.setAttribute("generationTime", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX").format(new Date()));
 
 		// Forward request to corresponding JSP page
 		request.getRequestDispatcher("/2.API/create-payment-cse.jsp").forward(request, response);
-		
+
 	}
-	
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		/**
@@ -85,17 +85,16 @@ public class CreatePaymentCSESoap extends HttpServlet {
 		 * The request should contain the following variables:
 		 * 
 		 * <pre>
-		 * - merchantAccount: the merchant account the payment was processed with
-		 * - reference: your reference
-		 * - shopperIP: the IP address of the shopper (recommended)
-		 * - shopperEmail: the e-mail address of the shopper 
-		 * - shopperReference: the shopper reference, i.e. the shopper ID
-		 * - fraudOffset: numeric value that will be added to the fraud score (optional)
-		 * - amount: the amount of the payment
-		 *     - currency: the currency of the payment
-		 *     - amount: the amount of the payment
-		 * - additionalData.card.encrypted.json: the encrypted card catched by the POST variables
-		 * </pre>
+		 * - merchantAccount           : The merchant account for which you want to process the payment
+		 * - amount
+		 *     - currency              : The three character ISO currency code.
+		 *     - value                 : The transaction amount in minor units (e.g. EUR 1,00 = 100).
+		 * - reference                 : Your reference for this payment.
+		 * - shopperIP                 : The shopper's IP address. (recommended)
+		 * - shopperEmail              : The shopper's email address. (recommended)
+		 * - shopperReference          : An ID that uniquely identifes the shopper, such as a customer id. (recommended)
+		 * - fraudOffset               : An integer that is added to the normal fraud score. (optional)
+		 * - additionalData.card.encrypted.json: The encrypted card catched by the POST variables.
 		 */
 
 		// Create new payment request
@@ -135,10 +134,13 @@ public class CreatePaymentCSESoap extends HttpServlet {
 		/**
 		 * If the payment passes validation a risk analysis will be done and, depending on the outcome, an authorisation
 		 * will be attempted. You receive a payment response with the following fields:
-		 * - pspReference: The reference we assigned to the payment;
-		 * - resultCode: The result of the payment. One of Authorised, Refused or Error;
-		 * - authCode: An authorisation code if the payment was successful, or blank otherwise;
-		 * - refusalReason: If the payment was refused, the refusal reason.
+		 * 
+		 * <pre>
+		 * - pspReference    : Adyen's unique reference that is associated with the payment.
+		 * - resultCode      : The result of the payment. Possible values: Authorised, Refused, Error or Received.
+		 * - authCode        : The authorisation code if the payment was successful. Blank otherwise.
+		 * - refusalReason   : Adyen's mapped refusal reason, populated if the payment was refused.
+		 * </pre>
 		 */
 		PrintWriter out = response.getWriter();
 
@@ -149,5 +151,5 @@ public class CreatePaymentCSESoap extends HttpServlet {
 		out.println("- refusalReason: " + paymentResult.getRefusalReason());
 
 	}
-	
+
 }

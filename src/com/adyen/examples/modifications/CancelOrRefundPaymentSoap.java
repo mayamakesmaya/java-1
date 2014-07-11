@@ -63,9 +63,9 @@ public class CancelOrRefundPaymentSoap extends HttpServlet {
 		 * The following parameters are used:
 		 * 
 		 * <pre>
-		 * - merchantAccount: the merchant account the payment was processed with
-		 * - originalReference: the pspReference that was assigned to the authorisation
-		 * - reference: your own reference or description to the modification (optional)
+		 * - merchantAccount        : The merchant account used to process the payment.
+		 * - originalReference      : The pspReference that was assigned to the authorisation.
+		 * - reference              : Your own reference or description of the modification. (optional)
 		 * </pre>
 		 */
 		ModificationRequest modificationRequest = new ModificationRequest();

@@ -52,36 +52,36 @@ public class CreatePaymentOnHppAdvanced extends HttpServlet {
 		 * The variables that you can post to the HPP are the following:
 		 * 
 		 * <pre>
-		 * merchantReference    : The merchant reference is your reference for the payment
-		 * paymentAmount        : Amount specified in minor units EUR 1,00 = 100
-		 * currencyCode         : The three-letter capitalised ISO currency code to pay in i.e. EUR
-		 * shipBeforeDate       : The date by which the goods or services are shipped.
+		 * merchantReference    : Your reference for this payment.
+		 * paymentAmount        : The transaction amount in minor units (e.g. EUR 1,00 = 100).
+		 * currencyCode         : The three character ISO currency code.
+		 * shipBeforeDate       : The date by which the goods or services specifed in the order must be shipped.
 		 *                        Format: YYYY-MM-DD
-		 * skinCode             : The skin code that should be used for the payment
-		 * merchantAccount      : The merchant account you want to process this payment with.
-		 * sessionValidity      : The final time by which a payment needs to have been made. 
+		 * skinCode             : The code of the skin to be used for the payment.
+		 * merchantAccount      : The merchant account for which you want to process the payment.
+		 * sessionValidity      : The time by which a payment needs to have been made.
 		 *                        Format: YYYY-MM-DDThh:mm:ssTZD
-		 * shopperLocale        : A combination of language code and country code to specify 
-		 *                        the language used in the session i.e. en_GB.
-		 * orderData            : A fragment of HTML/text that will be displayed on the HPP (optional)
-		 * countryCode          : Country code according to ISO_3166-1_alpha-2 standard  (optional)
-		 * shopperEmail         : The e-mailaddress of the shopper (optional)
-		 * shopperReference     : The shopper reference, i.e. the shopper ID (optional)
-		 * recurringContract    : Can be "ONECLICK","RECURRING" or "ONECLICK,RECURRING", this allows you to store
-		 *                        the payment details as a ONECLICK and/or RECURRING contract. Please note that if you
-		 *                        supply recurringContract, shopperEmail and shopperReference become mandatory.
-		 *                        Please view the recurring examples in the repository as well.
-		 * allowedMethods       : Allowed payment methods separated with a , i.e. "ideal,mc,visa" (optional)
-		 * blockedMethods       : Blocked payment methods separated with a , i.e. "ideal,mc,visa" (optional)
-		 * shopperStatement     : To submit a variable shopper statement you can set the shopperStatement field in the
-		 *                        payment request.
-		 * merchantReturnData   : This field willl be passed back as-is on the return URL when the shopper completes
+		 * shopperLocale        : A combination of language code and country code used to specify the language to be
+		 *                        used in the payment session (e.g. en_GB).
+		 * orderData            : A fragment of HTML/text that will be displayed on the HPP. (optional)
+		 * countryCode          : Country code according to ISO_3166-1_alpha-2 standard. (optional)
+		 * shopperEmail         : The shopper's email address. (recommended)
+		 * shopperReference     : An ID that uniquely identifes the shopper, such as a customer id. (recommended)
+		 * allowedMethods       : A comma-separated list of allowed payment methods, i.e. "ideal,mc,visa". (optional)
+		 * blockedMethods       : A comma-separated list of blocked payment methods, i.e. "ideal,mc,visa". (optional)
+		 * offset               : An integer that is added to the normal fraud score. (optional)
+		 * merchantSig          : The HMAC signature used by Adyen to test the validy of the form.
+		 * 
+		 * recurringContract    : Can be "ONECLICK", "RECURRING" or "ONECLICK,RECURRING". (optional)
+		 *                        This allows you to store the payment details as a ONECLICK and/or RECURRING contract.
+		 *                        Please note that if you supply recurringContract, shopperEmail and shopperReference
+		 *                        become mandatory. Please view the recurring examples in the repository as well.
+		 * shopperStatement     : Submit a variable shopper statement. (optional)
+		 * merchantReturnData   : This field will be passed back as-is on the return URL when the shopper completes
 		 *                        (or abandons) the payment and returns to your shop. (optional)
-		 * offset               : Numeric value that will be added to the fraud score (optional)
-		 * brandCode            : The payment method the shopper likes to pay with, i.e. ideal (optional)
-		 * issuerId             : If brandCode specifies a redirect payment method, the issuer can be 
-		 *                        defined here forcing the HPP to redirect directly to the payment method. (optional)
-		 * merchantSig          : The HMAC signature used by Adyen to test the validy of the form;
+		 * brandCode            : The payment method the shopper likes to pay with, i.e. ideal. (optional)
+		 * issuerId             : If brandCode specifies a redirect payment method, the issuer can be defined here
+		 *                        forcing the HPP to redirect directly to the payment method. (optional)
 		 * </pre>
 		 */
 
@@ -106,15 +106,15 @@ public class CreatePaymentOnHppAdvanced extends HttpServlet {
 		String countryCode = "NL";
 		String shopperEmail = "";
 		String shopperReference = "";
-		String recurringContract = "";
 		String allowedMethods = "";
 		String blockedMethods = "";
-		String shopperStatement = "";
-		String merchantReturnData = "";
 		String offset = "";
 
-		// By providing the brandCode and issuerId the HPP will redirect the shopper directly to the redirect payment
-		// method.
+		String recurringContract = "";
+		String shopperStatement = "";
+		String merchantReturnData = "";
+
+		// By providing the brandCode and issuerId the HPP will redirect the shopper directly to this payment method.
 		// Please note: the form should be posted to https://test.adyen.com/hpp/details.shtml rather than pay.shtml,
 		// change the hppUrl accordingly. While posting to details.shtml countryCode becomes a required as well.
 		String brandCode = "";
@@ -128,42 +128,42 @@ public class CreatePaymentOnHppAdvanced extends HttpServlet {
 		 * (AVS) field must be checked under Skin Options for each skin you wish to use. The following variables
 		 * can be send to the HPP:
 		 * 
-		 * 1. Billing address;
-		 * - billingAddress.street: The street name
-		 * - billingAddress.houseNumberOrName: The house number
-		 * - billingAddress.city: The city.
-		 * - billingAddress.postalCode: The postal/zip code.
-		 * - billingAddress.stateOrProvince: The state or province.
-		 * - billingAddress.country: The country in ISO 3166-1 alpha-2 format i.e. NL.
-		 * - billingAddressType: You can specify whether the shopper is allowed to view and/or modify these personal
-		 * details.
-		 * - billingAddressSig: A separate merchant signature that is required for these fields.
+		 * <pre>
+		 * - billingAddress.street             : The street name.
+		 * - billingAddress.houseNumberOrName  : The house number (or name).
+		 * - billingAddress.city               : The city.
+		 * - billingAddress.postalCode         : The postal/zip code.
+		 * - billingAddress.stateOrProvince    : The state or province.
+		 * - billingAddress.country            : The country in ISO 3166-1 alpha-2 format (e.g. NL).
+		 * - billingAddressType                : Specify whether the shopper is allowed to view and/or modify these
+		 *                                       personal details (see below).
+		 * - billingAddressSig                 : A separate merchant signature for these fields.
 		 * 
-		 * 2. Delivery address;
-		 * - deliveryAddress.street: The street name
-		 * - deliveryAddress.houseNumberOrName: The house number
-		 * - deliveryAddress.city: The city.
-		 * - deliveryAddress.postalCode: The postal/zip code.
-		 * - deliveryAddress.stateOrProvince: The state or province.
-		 * - deliveryAddress.country: The country in ISO 3166-1 alpha-2 format i.e. NL.
-		 * - deliveryAddressType: You can specify whether the shopper is allowed to view and/or modify these personal
-		 * details.
-		 * - deliveryAddressSig: A separate merchant signature that is required for these fields.
+		 * - deliveryAddress.street            : The street name.
+		 * - deliveryAddress.houseNumberOrName : The house number (or name).
+		 * - deliveryAddress.city              : The city.
+		 * - deliveryAddress.postalCode        : The postal/zip code.
+		 * - deliveryAddress.stateOrProvince   : The state or province.
+		 * - deliveryAddress.country           : The country in ISO 3166-1 alpha-2 format (e.g. NL).
+		 * - deliveryAddressType               : Specify whether the shopper is allowed to view and/or modify these
+		 *                                       personal details (see below).
+		 * - deliveryAddressSig                : A separate merchant signature for these fields.
 		 * 
-		 * 3. Shopper information
-		 * - shopper.firstName: First name of the shopper.
-		 * - shopper.infix: The shopper infix.
-		 * - shopper.lastName: The shopper lastname.
-		 * - shopper.gender: The shopper gender: MALE/FEMALE
-		 * - shopper.dateOfBirthDayOfMonth: The day of the month of the shopper's birth.
-		 * - shopper.dateOfBirthMonth: The month of the shopper's birth.
-		 * - shopper.dateOfBirthYear: The year of the shopper's birth.
-		 * - shopper.telephoneNumber: The shopper's telephone number.
-		 * - shopperType: This field can be used if validation of the shopper fiels are desired.
-		 * - shopperSig: A separate merchant signature that is required for these fields.
+		 * - shopper.firstName                 : The shopper's firstname.
+		 * - shopper.infix                     : The shopper infx.
+		 * - shopper.lastName                  : The shopper's lastname.
+		 * - shopper.gender                    : The shopper's gender (MALE/FEMALE).
+		 * - shopper.dateOfBirthDayOfMonth     : The day of the month of the shopper's birth.
+		 * - shopper.dateOfBirthMonth          : The month of the shopper's birth.
+		 * - shopper.dateOfBirthYear           : The year of the shopper's birth.
+		 * - shopper.telephoneNumber           : The shopper's telephone number.
+		 * - shopperType                       : This field can be used if validation of the shopper fields is desired.
+		 * - shopperSig                        : A separate merchant signature for these fields.
+		 *                                       (optional if shopperType is not supplied)
+		 * </pre>
 		 * 
 		 * Please note: billingAddressType, deliveryAddressType and shopperType can have the following values:
-		 * - Not supplied: modifiable / visible;
+		 * - Not supplied: modifiable / visible
 		 * - 1: unmodifiable / visible
 		 * - 2: unmodifiable / invisible
 		 */
