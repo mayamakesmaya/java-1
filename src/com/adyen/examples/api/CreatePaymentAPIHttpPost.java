@@ -1,6 +1,7 @@
 package com.adyen.examples.api;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
@@ -46,11 +47,11 @@ import org.apache.http.util.EntityUtils;
 @WebServlet(urlPatterns = { "/2.API/HttpPost/CreatePaymentAPI" })
 public class CreatePaymentAPIHttpPost extends HttpServlet {
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		/**
 		 * HTTP Post settings
-		 * - httpAdapter: API URL you are using (Test/Live)
+		 * - apiUrl: URL of the Adyen API you are using (Test/Live)
 		 * - wsUser: your web service user
 		 * - wsPassword: your web service user's password
 		 */
@@ -156,21 +157,14 @@ public class CreatePaymentAPIHttpPost extends HttpServlet {
 		 * - refusalReason: If the payment was refused, the refusal reason.
 		 */
 		Map<String, String> paymentResult = parseQueryString(paymentResponse);
+		PrintWriter out = response.getWriter();
 
-		request.setAttribute("paymentResult", paymentResponse);
-		request.setAttribute("pspReference", paymentResult.get("paymentResult.pspReference"));
-		request.setAttribute("resultCode", paymentResult.get("paymentResult.resultCode"));
-		request.setAttribute("authCode", paymentResult.get("paymentResult.authCode"));
-		request.setAttribute("refusalReason", paymentResult.get("paymentResult.refusalReason"));
-
-		// Forward payment result to corresponding JSP page
-		request.getRequestDispatcher("/2.API/create-payment-api.jsp").forward(request, response);
-
-	}
-
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// Forward GET request to corresponding JSP page
-		request.getRequestDispatcher("/2.API/create-payment-api.jsp").forward(request, response);
+		out.println("Payment Result:");
+		out.println("- pspReference: " + paymentResult.get("paymentResult.pspReference"));
+		out.println("- resultCode: " + paymentResult.get("paymentResult.resultCode"));
+		out.println("- authCode: " + paymentResult.get("paymentResult.authCode"));
+		out.println("- refusalReason: " + paymentResult.get("paymentResult.refusalReason"));
+		
 	}
 
 	/**

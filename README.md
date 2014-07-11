@@ -2,7 +2,7 @@ Adyen Java Integration
 ==============
 The code examples in this repository help you integrate with the Adyen platform using Java. Please go through the code examples and read the documentation in the files itself. Each code example requires you to change some parameters to connect to your Adyen account, such as merchant account and skincode.
 
-## Servlet overview
+## Examples overview
 ```
 1.HPP (Hosted Payment Page)
   - CreatePaymentOnHpp             : Simple form creating a payment on our HPP
@@ -13,8 +13,8 @@ The code examples in this repository help you integrate with the Adyen platform 
     - CreatePaymentAPI             : Create a payment via our API
     - CreatePaymentCSE             : Create a Client-Side Encrypted payment
   - SOAP
-    - CreatePaymentOnHpp           : Create a payment via our API
-    - CreatePaymentOnHppAdvanced   : Create a Client-Side Encrypted payment
+    - CreatePaymentAPI             : Create a payment via our API
+    - CreatePaymentCSE             : Create a Client-Side Encrypted payment
 ```
 
 ## Code structure
@@ -32,13 +32,14 @@ WebContent                                : JSP pages for the servlets
   - 1.HPP
     - create-payment-on-hpp.jsp
     - create-payment-on-hpp-advanced.jsp
+    - create-payment-url.jsp
   - 2.API
-    - create-payment-api.jsp
     - create-payment-cse.jsp
-  - js
-    - adyen.encrypt.min.js                : JavaScript file required for encrypting card data
-  - WEB-INF/lib/                          : Java libraries (JARs) used in the servlets
-  - WEB-INF/web.xml                       : Deployment descriptor
+    - js
+      - adyen.encrypt.min.js              : JavaScript file required for encrypting card data
+  - WEB-INF
+    - lib/                                : Java libraries (JARs) used in the servlets
+    - web.xml                             : Deployment descriptor
 ```
 
 ## Manuals

@@ -1,6 +1,7 @@
 package com.adyen.examples.api;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -37,7 +38,7 @@ import com.adyen.services.payment.ServiceException;
 @WebServlet(urlPatterns = { "/2.API/Soap/CreatePaymentAPI" })
 public class CreatePaymentAPISoap extends HttpServlet {
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		/**
 		 * SOAP settings
@@ -145,20 +146,14 @@ public class CreatePaymentAPISoap extends HttpServlet {
 		 * - authCode: An authorisation code if the payment was successful, or blank otherwise;
 		 * - refusalReason: If the payment was refused, the refusal reason.
 		 */
-		request.setAttribute("paymentResult", paymentResult);
-		request.setAttribute("pspReference", paymentResult.getPspReference());
-		request.setAttribute("resultCode", paymentResult.getResultCode());
-		request.setAttribute("authCode", paymentResult.getAuthCode());
-		request.setAttribute("refusalReason", paymentResult.getRefusalReason());
+		PrintWriter out = response.getWriter();
 
-		// Forward payment result to corresponding JSP page
-		request.getRequestDispatcher("/2.API/create-payment-api.jsp").forward(request, response);
-
-	}
-
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// Forward GET request to corresponding JSP page
-		request.getRequestDispatcher("/2.API/create-payment-api.jsp").forward(request, response);
+		out.println("Payment Result:");
+		out.println("- pspReference: " + paymentResult.getPspReference());
+		out.println("- resultCode: " + paymentResult.getResultCode());
+		out.println("- authCode: " + paymentResult.getAuthCode());
+		out.println("- refusalReason: " + paymentResult.getRefusalReason());
+		
 	}
 
 }
