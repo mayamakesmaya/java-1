@@ -13,8 +13,8 @@ import javax.xml.ws.BindingProvider;
 
 import com.adyen.services.payment.ModificationRequest;
 import com.adyen.services.payment.ModificationResult;
-import com.adyen.services.payment.Payment;
 import com.adyen.services.payment.PaymentPortType;
+import com.adyen.services.payment.PaymentService;
 import com.adyen.services.payment.ServiceException;
 
 /**
@@ -50,7 +50,7 @@ public class CancelPaymentSoap extends HttpServlet {
 		 * 
 		 * @see WebContent/WEB-INF/lib/adyen-wsdl-cxf.jar
 		 */
-		Payment service = new Payment(new URL(wsdl));
+		PaymentService service = new PaymentService(new URL(wsdl));
 		PaymentPortType client = service.getPaymentHttpPort();
 
 		// Set HTTP Authentication

@@ -16,10 +16,10 @@ import javax.xml.ws.BindingProvider;
 import com.adyen.services.common.Address;
 import com.adyen.services.common.Amount;
 import com.adyen.services.payment.Card;
-import com.adyen.services.payment.Payment;
 import com.adyen.services.payment.PaymentPortType;
 import com.adyen.services.payment.PaymentRequest;
 import com.adyen.services.payment.PaymentResult;
+import com.adyen.services.payment.PaymentService;
 import com.adyen.services.payment.ServiceException;
 
 /**
@@ -55,7 +55,7 @@ public class CreatePaymentAPISoap extends HttpServlet {
 		 * 
 		 * @see WebContent/WEB-INF/lib/adyen-wsdl-cxf.jar
 		 */
-		Payment service = new Payment(new URL(wsdl));
+		PaymentService service = new PaymentService(new URL(wsdl));
 		PaymentPortType client = service.getPaymentHttpPort();
 
 		// Set HTTP Authentication
