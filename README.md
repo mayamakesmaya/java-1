@@ -40,6 +40,9 @@ The code examples in this repository help you integrate with the Adyen platform 
     - RetrieveRecurringContract    : Retrieve a recurring contract using SOAP
 6.PaymentMethods
   - GetPaymentMethods              : Get payment methods available for merchant account
+8.CustomFields
+  - HttpPost
+    - CustomFieldsServer           : Custom fields service using HTTP Post
 ```
 
 ## Code structure
@@ -51,6 +54,7 @@ src
   - com.adyen.examples.modifications      : Java implementation of 4.Modifications
   - com.adyen.examples.recurring          : Java implementation of 5.Recurring
   - com.adyen.examples.paymentmethods     : Java implementation of 6.PaymentMethods
+  - com.adyen.examples.customfields       : Java implementation of 8.CustomFields
 WebContent
   - 1.HPP
     - create-payment-on-hpp.jsp           : JSP template file for simple HPP
