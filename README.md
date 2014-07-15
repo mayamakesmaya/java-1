@@ -12,20 +12,32 @@ The code examples in this repository help you integrate with the Adyen platform 
   - HttpPost
     - CreatePaymentAPI             : Create a payment via our API
     - CreatePaymentCSE             : Create a Client-Side Encrypted payment
-  - SOAP
+  - Soap
     - CreatePaymentAPI             : Create a payment via our API
     - CreatePaymentCSE             : Create a Client-Side Encrypted payment
+3.Notifications
+  - HttpPost
+    - NotificationServer           : Receive our notifications using HTTP Post
 4.Modifications
   - HttpPost
     - CancelOrRefundPayment        : Cancel or refund a payment using HTTP Post
     - CancelPayment                : Cancel a payment using HTTP Post
     - CapturePayment               : Capture a payment using HTTP Post
     - RefundPayment                : Request a refund using HTTP Post
-  - SOAP
+  - Soap
     - CancelOrRefundPayment        : Cancel or refund a payment using SOAP
     - CancelPayment                : Cancel a payment using SOAP
     - CapturePayment               : Capture a payment using SOAP
     - RefundPayment                : Request a refund using SOAP
+5.Recurring
+  - HttpPost
+    - CreateRecurringPayment       : Create a recurring payment using HTTP Post
+    - DisableRecurringContract     : Disable a recurring contract using HTTP Post
+    - RetrieveRecurringContract    : Retrieve a recurring contract using HTTP Post
+  - Soap
+    - CreateRecurringPayment       : Create a recurring payment using SOAP
+    - DisableRecurringContract     : Disable a recurring contract using SOAP
+    - RetrieveRecurringContract    : Retrieve a recurring contract using SOAP
 ```
 
 ## Code structure
@@ -33,7 +45,9 @@ The code examples in this repository help you integrate with the Adyen platform 
 src
   - com.adyen.examples.hpp                : Java implementation of 1.HPP
   - com.adyen.examples.api                : Java implementation of 2.API
+  - com.adyen.examples.notifications      : Java implementation of 3.Notifications
   - com.adyen.examples.modifications      : Java implementation of 4.Modifications
+  - com.adyen.examples.recurring          : Java implementation of 5.Recurring
 WebContent
   - 1.HPP
     - create-payment-on-hpp.jsp           : JSP template file for simple HPP
