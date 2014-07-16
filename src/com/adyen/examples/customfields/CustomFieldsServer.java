@@ -32,7 +32,7 @@ import org.apache.commons.codec.binary.Base64;
  */
 
 @WebServlet(urlPatterns = { "/8.CustomFields/HttpPost/CustomFieldsServer" })
-public class CustomFieldsServerHttpPost extends HttpServlet {
+public class CustomFieldsServer extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
