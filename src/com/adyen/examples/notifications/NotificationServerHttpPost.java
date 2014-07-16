@@ -82,8 +82,7 @@ public class NotificationServerHttpPost extends HttpServlet {
 		 * - currency
 		 * 
 		 * We recommend you to handle the notifications based on the eventCode types available, please refer to the
-		 * integration manual for a comprehensive list. For debug purposes we also recommend you to store the
-		 * notification itself.
+		 * integration manual for a comprehensive list. We also recommend you to save the notification itself.
 		 */
 
 		switch (request.getParameter("eventCode")) {
@@ -149,25 +148,27 @@ public class NotificationServerHttpPost extends HttpServlet {
 				break;
 		}
 
-		// Log the notification in a appropriate way
-		logNotification(request);
+		// Save the notification in a appropriate way. In this example, the notification is simply logged to System.out.
+		boolean notificationSaved = saveNotification(request);
 
 		/**
 		 * Return [accepted]
 		 * 
-		 * Please make sure you always return [accepted] to us, this is essential to let us know that you received the
-		 * notification. If we do NOT receive [accepted] we try to send the notification again which will put all other
-		 * notification in a queue.
+		 * Please make sure to return [accepted] to us when you have saved/processed the notification. This is essential
+		 * to let us know that you received the notification. If we do NOT receive [accepted] we try to send the
+		 * notification again, which will put all other notifications in a queue.
 		 */
-		PrintWriter out = response.getWriter();
-		out.print("[accepted]");
+		if (notificationSaved) {
+			PrintWriter out = response.getWriter();
+			out.print("[accepted]");
+		}
 
 	}
 
 	/**
-	 * Print all request headers and parameters to System.out
+	 * Print all request headers and parameters of a notification to System.out
 	 */
-	private void logNotification(HttpServletRequest request) {
+	private boolean saveNotification(HttpServletRequest request) {
 		System.out.println("***** Received Notification: "
 				+ new SimpleDateFormat("dd-MM-yyyy HH:mm:ss.SSS").format(new Date()));
 
@@ -187,6 +188,9 @@ public class NotificationServerHttpPost extends HttpServlet {
 
 		System.out.println("****************************************************");
 		System.out.println();
+
+		// Indicate that the notification is saved correctly
+		return true;
 	}
 
 }
