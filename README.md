@@ -2,7 +2,7 @@ Adyen Java Integration
 ==============
 The code examples in this repository help you integrate with the Adyen platform using Java. Please go through the code examples and read the documentation in the files itself. Each code example requires you to change some parameters to connect to your Adyen account, such as merchant account and skincode.
 
-## Examples overview
+## Examples
 ```
 1.HPP (Hosted Payment Page)
   - CreatePaymentOnHpp             : Simple form creating a payment on our HPP
@@ -10,11 +10,11 @@ The code examples in this repository help you integrate with the Adyen platform 
   - CreatePaymentUrl               : Create payment URL on our HPP
 2.API
   - HttpPost
-    - CreatePaymentAPI             : Create a payment via our API
-    - CreatePaymentCSE             : Create a Client-Side Encrypted payment
+    - CreatePaymentAPI             : Create a payment via our API using HTTP Post
+    - CreatePaymentCSE             : Create a Client-Side Encrypted payment using HTTP Post
   - Soap
-    - CreatePaymentAPI             : Create a payment via our API
-    - CreatePaymentCSE             : Create a Client-Side Encrypted payment
+    - CreatePaymentAPI             : Create a payment via our API using SOAP
+    - CreatePaymentCSE             : Create a Client-Side Encrypted payment using SOAP
 3.Notifications
   - HttpPost
     - NotificationServer           : Receive our notifications using HTTP Post
@@ -40,6 +40,9 @@ The code examples in this repository help you integrate with the Adyen platform 
     - RetrieveRecurringContract    : Retrieve a recurring contract using SOAP
 6.PaymentMethods
   - GetPaymentMethods              : Get payment methods available for merchant account
+7.OpenInvoice
+  - HttpPost
+    - OpenInvoiceServer            : Open invoice service using HTTP Post
 8.CustomFields
   - HttpPost
     - CustomFieldsServer           : Custom fields service using HTTP Post
@@ -61,6 +64,7 @@ src
   - com.adyen.examples.modifications      : Java implementation of 4.Modifications
   - com.adyen.examples.recurring          : Java implementation of 5.Recurring
   - com.adyen.examples.paymentmethods     : Java implementation of 6.PaymentMethods
+  - com.adyen.examples.openinvoice        : Java implementation of 7.OpenInvoice
   - com.adyen.examples.customfields       : Java implementation of 8.CustomFields
   - com.adyen.examples.payout             : Java implementation of 9.Payout
 tools
