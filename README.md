@@ -43,6 +43,13 @@ The code examples in this repository help you integrate with the Adyen platform 
 8.CustomFields
   - HttpPost
     - CustomFieldsServer           : Custom fields service using HTTP Post
+9.Payout
+  - Soap
+    - ConfirmPayoutRequest         : Confirm payout request using SOAP
+    - DeclinePayoutRequest         : Decline payout request using SOAP
+    - StorePayoutDetails           : Store payout details using SOAP
+    - StorePayoutDetailsAndSubmit  : Store payout details and submit payout request using SOAP
+    - SubmitPayoutRequest          : Submit payout request using SOAP
 ```
 
 ## Code structure
@@ -55,6 +62,9 @@ src
   - com.adyen.examples.recurring          : Java implementation of 5.Recurring
   - com.adyen.examples.paymentmethods     : Java implementation of 6.PaymentMethods
   - com.adyen.examples.customfields       : Java implementation of 8.CustomFields
+  - com.adyen.examples.payout             : Java implementation of 9.Payout
+tools
+  - wsdl2java.xml                         : Ant buildfile for generating SOAP classes
 WebContent
   - 1.HPP
     - create-payment-on-hpp.jsp           : JSP template file for simple HPP
