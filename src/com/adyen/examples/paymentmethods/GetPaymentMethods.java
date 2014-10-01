@@ -2,6 +2,7 @@ package com.adyen.examples.paymentmethods;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -134,12 +135,12 @@ public class GetPaymentMethods extends HttpServlet {
 	/**
 	 * Computes the Base64 encoded signature using the HMAC algorithm with the SHA-1 hashing function.
 	 */
-	private String calculateHMAC(String hmacKey, String signingString) throws GeneralSecurityException {
+	private String calculateHMAC(String hmacKey, String signingString) throws GeneralSecurityException, UnsupportedEncodingException {
 		SecretKeySpec keySpec = new SecretKeySpec(hmacKey.getBytes(), "HmacSHA1");
 		Mac mac = Mac.getInstance("HmacSHA1");
 		mac.init(keySpec);
 
-		byte[] result = mac.doFinal(signingString.getBytes());
+		byte[] result = mac.doFinal(signingString.getBytes("UTF-8"));
 		return Base64.encodeBase64String(result);
 	}
 

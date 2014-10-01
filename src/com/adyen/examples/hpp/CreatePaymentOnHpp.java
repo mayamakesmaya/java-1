@@ -2,6 +2,7 @@ package com.adyen.examples.hpp;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -138,6 +139,9 @@ public class CreatePaymentOnHpp extends HttpServlet {
 		request.setAttribute("blockedMethods", blockedMethods);
 		request.setAttribute("offset", offset);
 		request.setAttribute("merchantSig", merchantSig);
+		
+		// Set correct character encoding
+		response.setCharacterEncoding("UTF-8");
 
 		// Forward request data to corresponding JSP page
 		request.getRequestDispatcher("/1.HPP/create-payment-on-hpp.jsp").forward(request, response);
@@ -150,7 +154,7 @@ public class CreatePaymentOnHpp extends HttpServlet {
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		GZIPOutputStream gzip = new GZIPOutputStream(output);
 
-		gzip.write(input.getBytes());
+		gzip.write(input.getBytes("UTF-8"));
 		gzip.close();
 		output.close();
 
@@ -160,12 +164,12 @@ public class CreatePaymentOnHpp extends HttpServlet {
 	/**
 	 * Computes the Base64 encoded signature using the HMAC algorithm with the SHA-1 hashing function.
 	 */
-	private String calculateHMAC(String hmacKey, String signingString) throws GeneralSecurityException {
+	private String calculateHMAC(String hmacKey, String signingString) throws GeneralSecurityException, UnsupportedEncodingException {
 		SecretKeySpec keySpec = new SecretKeySpec(hmacKey.getBytes(), "HmacSHA1");
 		Mac mac = Mac.getInstance("HmacSHA1");
 		mac.init(keySpec);
 
-		byte[] result = mac.doFinal(signingString.getBytes());
+		byte[] result = mac.doFinal(signingString.getBytes("UTF-8"));
 		return Base64.encodeBase64String(result);
 	}
 
