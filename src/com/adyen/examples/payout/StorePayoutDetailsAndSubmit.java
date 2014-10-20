@@ -32,7 +32,7 @@ import com.adyen.services.payout.StoreDetailAndSubmitResponse2;
  * Webservice User accounts needed to use the Payout process. Please request the Payout permission for a specific user
  * account with Adyen Support. The password can be set in Adyen CA >> Settings >> Users.
  * 
- * @link /9.Payout/Soap/StorePayoutDetails
+ * @link /9.Payout/Soap/StorePayoutDetailsAndSubmit
  * @author Created by Adyen - Payments Made Easy
  */
 

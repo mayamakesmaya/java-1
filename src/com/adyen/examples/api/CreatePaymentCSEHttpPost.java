@@ -48,7 +48,7 @@ import org.apache.http.util.EntityUtils;
  * Please note: using our API requires a web service user. Set up your Webservice user:
  * Adyen CA >> Settings >> Users >> ws@Company. >> Generate Password >> Submit
  * 
- * @link /2.API/Soap/CreatePaymentCSE
+ * @link /2.API/HttpPost/CreatePaymentCSE
  * @author Created by Adyen - Payments Made Easy
  */
 

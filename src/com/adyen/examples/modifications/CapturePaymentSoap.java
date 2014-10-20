@@ -70,7 +70,7 @@ public class CapturePaymentSoap extends HttpServlet {
 		 *     - currency         : The three character ISO currency code, must match that of the original payment request.
 		 *     - value            : The amount to capture (in minor units), must be less than or equal to the authorised amount.
 		 * - originalReference    : The pspReference that was assigned to the authorisation.
-		 * 		   - reference            : Your own reference or description of the modification. (optional)
+		 * - reference            : Your own reference or description of the modification. (optional)
 		 * </pre>
 		 */
 		ModificationRequest modificationRequest = new ModificationRequest();
