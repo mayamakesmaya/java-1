@@ -38,7 +38,7 @@ public class ConfirmPayoutRequest extends HttpServlet {
 		/**
 		 * SOAP settings
 		 * - wsdl: the WSDL url you are using (Test/Live)
-		 * - wsUser: your web service user to store Payout details, and to initiate a Payout
+		 * - wsUser: your web service user to modify Payouts
 		 * - wsPassword: your web service user's password
 		 */
 		String wsdl = "https://pal-test.adyen.com/pal/servlet/soap/Payout?wsdl";
@@ -72,8 +72,7 @@ public class ConfirmPayoutRequest extends HttpServlet {
 		/**
 		 * Send the confirm payout request.
 		 */
-		ModifyResponse confirmResult;
-		confirmResult = client.confirm(confirmRequest);
+		ModifyResponse confirmResult = client.confirm(confirmRequest);
 
 		/**
 		 * If the message is syntactically valid and merchantAccount is correct you will receive a confirmResponse with

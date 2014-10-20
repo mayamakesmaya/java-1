@@ -125,8 +125,7 @@ public class StorePayoutDetailsAndSubmit extends HttpServlet {
 		/**
 		 * Send the store details and submit request.
 		 */
-		StoreDetailAndSubmitResponse2 storeDetailsAndSubmitResult;
-		storeDetailsAndSubmitResult = client.storeDetailAndSubmit(payoutRequest);
+		StoreDetailAndSubmitResponse2 storeDetailsAndSubmitResult = client.storeDetailAndSubmit(payoutRequest);
 
 		/**
 		 * If the message is syntactically valid and merchantAccount is correct you will receive a

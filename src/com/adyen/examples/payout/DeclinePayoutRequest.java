@@ -17,7 +17,7 @@ import com.adyen.services.payout.PayoutPortType;
 import com.adyen.services.payout.PayoutService;
 
 /**
- * Confirm Payout Request (SOAP)
+ * Decline Payout Request (SOAP)
  * 
  * Confirming and declining the Payout can be done via a webservice call to the Payout Service or manually via the
  * Customer Area (CA). This example shows how a Payout request can be declined using SOAP.
@@ -38,7 +38,7 @@ public class DeclinePayoutRequest extends HttpServlet {
 		/**
 		 * SOAP settings
 		 * - wsdl: the WSDL url you are using (Test/Live)
-		 * - wsUser: your web service user to store Payout details, and to initiate a Payout
+		 * - wsUser: your web service user to modify Payouts
 		 * - wsPassword: your web service user's password
 		 */
 		String wsdl = "https://pal-test.adyen.com/pal/servlet/soap/Payout?wsdl";
@@ -72,8 +72,7 @@ public class DeclinePayoutRequest extends HttpServlet {
 		/**
 		 * Send the decline payout request.
 		 */
-		ModifyResponse declineResult;
-		declineResult = client.decline(declineRequest);
+		ModifyResponse declineResult = client.decline(declineRequest);
 
 		/**
 		 * If the message is syntactically valid and merchantAccount is correct you will receive a declineResponse with

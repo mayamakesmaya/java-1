@@ -102,8 +102,7 @@ public class StorePayoutDetails extends HttpServlet {
 		/**
 		 * Send the store details request.
 		 */
-		StoreDetailResponse2 storeDetailsResult;
-		storeDetailsResult = client.storeDetail(storeDetailsRequest);
+		StoreDetailResponse2 storeDetailsResult = client.storeDetail(storeDetailsRequest);
 
 		/**
 		 * If the message is syntactically valid and merchantAccount is correct you will receive a storeDetailResponse

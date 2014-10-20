@@ -111,10 +111,9 @@ public class SubmitPayoutRequest extends HttpServlet {
 		submitRequest.setAmount(amount);
 
 		/**
-		 * Send the store details and submit request.
+		 * Send the submit payout request.
 		 */
-		SubmitResponse2 submitResult;
-		submitResult = client.submit(submitRequest);
+		SubmitResponse2 submitResult = client.submit(submitRequest);
 
 		/**
 		 * If the message is syntactically valid and merchantAccount is correct you will receive a submitResponse with
