@@ -99,7 +99,7 @@ public class CapturePaymentSoap extends HttpServlet {
 		 * - pspReference: A new reference to uniquely identify this modification request.
 		 * - response: A confirmation indicating we received the request: [capture-received].
 		 * 
-		 * Please note: The result of the cancellation is sent via a notification with eventCode CAPTURE.
+		 * Please note: The result of the capture is sent via a notification with eventCode CAPTURE.
 		 */
 		PrintWriter out = response.getWriter();
 
