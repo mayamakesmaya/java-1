@@ -127,6 +127,7 @@ public class CustomFieldsServer extends HttpServlet {
 			out.print("response.response=[accepted]");
 		}
 		else {
+			out.print("response.customFields.0.name=terms_conditions&");
 			out.print("response.customFields.0.value=Please agree with terms and conditions!&");
 			out.print("response.response=[invalid]");
 		}
