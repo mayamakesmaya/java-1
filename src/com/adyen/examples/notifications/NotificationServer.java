@@ -41,6 +41,7 @@ public class NotificationServer extends HttpServlet {
 		 */
 		String notificationUser = "TestUser";
 		String notificationPassword = "TestPassword";
+		String notificationEmail = "mayaemail";
 
 		String authHeader = request.getHeader("Authorization");
 
