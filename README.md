@@ -1,4 +1,4 @@
-Maya Java Integration
+Pegasus Java Integration
 ==============
 The code examples in this repository help you integrate with the Adyen platform using Java. Please go through the code examples and read the documentation in the files itself. Each code example requires you to change some parameters to connect to your Adyen account, such as merchant account and skincode.
 
